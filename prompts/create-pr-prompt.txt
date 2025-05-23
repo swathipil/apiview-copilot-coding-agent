@@ -1,0 +1,11 @@
+1. Analyze the description in azure-keyvault-secrets.json. 
+2. Create a new branch off of apiviewCopilotCodingAgent.
+3. Generate a draft pull request titled [WIP] Fix azure-keyvault-secrets APIView comments.
+4. Address comments using best practices. Ignore the /build/ folder when making changes. The code is part of the Azure SDK for Python, specifically for the Key Vault Secrets library. The goal is to ensure that the code adheres to best practices and is maintainable.\n\nThe code is located in the following repository:
+    - Repository: swathipil/azure-sdk-for-python
+    - Local Location: ~/repos/azure-sdk-for-python
+    - Folder: sdk/keyvault/azure-keyvault-secrets
+    - Branch: apiviewCopilotCodingAgent
+    - Package: azure-keyvault-secrets
+5. Push code changes to the branch.
+6. Update the PR title once the work is complete.
