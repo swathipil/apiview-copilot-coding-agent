@@ -31,9 +31,9 @@ Follow these steps to address APIView comments and create a pull request in the 
 - **⚠️ Local repository files should ONLY be used for making final changes, never for discovery**
 - Example correct approach: "I'll search for the SchemaFormat class in the remote Azure/azure-sdk-for-python repository"
 - DO identify the target repository, package, and branch by searching the following remote repositories.
-  - `azure-sdk-for-python`: https://github.com/Azure/azure-sdk-for-python
-  - `azure-rest-api-specs`: https://github.com/Azure/azure-rest-api-specs/
-  - `azure-sdk-tools`: https://github.com/Azure/azure-sdk-tools
+  - `azure-sdk-for-python`: https://github.com/Azure/azure-sdk-for-python (for handwritten code and _patch.py files)
+  - `azure-rest-api-specs`: https://github.com/Azure/azure-rest-api-specs/ (for TypeSpec source files ONLY)
+  - `azure-sdk-tools`: https://github.com/Azure/azure-sdk-tools (for filing APIView bugs)
 - DO identify all target repositories, since multiple repositories may require changes.
 - DO take the following steps when identifying the target repository and branch:
   - If the comments apply to a file in the `azure-sdk-for-<language>` repo:
@@ -70,34 +70,48 @@ Follow these steps to address APIView comments and create a pull request in the 
 └──────────┬──────────────┘
            │
            ▼
-    ┌──────────────┐     Yes     ┌──────────────────────┐
-    │ Header found?├────────────►│ DO NOT modify file   │
-    └──────┬───────┘             │ directly!            │
-           │                     └──────────┬───────────┘
-           │ No                            │
-           ▼                               ▼
-┌─────────────────────┐          ┌──────────────────────┐
-│ Make changes        │          │ Find TypeSpec/swagger │
-│ directly in file    │          │ in azure-rest-api-   │
-│ (handwritten code)  │          │ specs repository      │
-└─────────────────────┘          └──────────┬───────────┘
-                                           │
-                                           ▼
-                              ┌──────────────────────────────┐
-                              │ Can changes be applied       │
-                              │ in TypeSpec/swagger?         │
-                              └───────────┬──────────────────┘
-                                          │
-                  ┌────────────────────┐  │  ┌───────────────────────┐
-                  │ Yes: Modify the    │◄──┴──►No: Add changes to    │
-                  │ TypeSpec/swagger   │      │ _patch.py file in SDK │
-                  └────────────────────┘      └───────────────────────┘
+    ┌──────────────┐     No      ┌─────────────────────┐
+    │ Header found?├────────────►│ Make changes        │
+    └──────┬───────┘             │ directly in file    │
+           │                     │ (handwritten code)  │
+           │ Yes                 └─────────────────────┘
+           ▼
+┌──────────────────────────────┐
+│ DO NOT modify file directly! │
+└──────────┬───────────────────┘
+           │
+           ▼
+┌───────────────────────────┐
+│ Generated from TypeSpec?  │
+└───────────┬───────┬───────┘
+            │       │
+           Yes      │ No (Swagger)
+            │       │
+            ▼       ▼
+┌──────────────┐  ┌──────────────────────────────┐
+│ Find TypeSpec│  │ DO NOT UPDATE SWAGGER SOURCE │
+│ in azure-    │  │ (Legacy approach)            │
+│ rest-api-    │  └──────────────┬───────────────┘
+│ specs repo   │                 │
+└──────┬───────┘                 │
+       │                         │
+       ▼                         ▼
+┌─────────────────────────────┐  ┌─────────────────────┐
+│ Can changes be applied      │  │ Add changes to      │
+│ in TypeSpec?                │  │ _patch.py file      │
+└─────────┬───────────────────┘  │ in SDK repo         │
+          │                      └─────────────────────┘
+  ┌───────┴───────┐  ┌───────────────────┐
+  │ Yes: Modify   │  │ No: Add changes   │
+  │ TypeSpec file │  │ to _patch.py file │
+  └───────────────┘  └───────────────────┘
 ```
 
 - For each comment, make the necessary code changes following Azure SDK and language-specific best practices
 - Ignore the `/build/` folder
 - Ensure code is maintainable and adheres to repository guidelines
 - **ALWAYS verify the file header before making any changes**
+- **IMPORTANT: Code generated from Swagger (not TypeSpec) should NOT have the source updated - use _patch.py files instead**
 
 ## Step 4: Commit and Push Changes
 - Commit your changes with a clear message referencing the APIView comments addressed.
